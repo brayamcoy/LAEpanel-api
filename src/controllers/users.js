@@ -41,7 +41,7 @@ export const createUser = async (req, res) => {
 export const getUser = async (req, res) => {
 
     try{
-        const user = await Users.find();
+        const user = await Users.find().populate('roles');
         res
         .status(200)
         .json(user)
@@ -56,7 +56,7 @@ export const getUser = async (req, res) => {
 export const getUserById = async (req, res) => {
 
     try{ 
-        const user = await Users.findById(req.params.id);
+        const user = await Users.findById(req.params.id).populate('roles');
         res
             .status(200)
             .json(user)
@@ -89,7 +89,7 @@ export const updateUserById =  async (req, res) => {
 export const deleteUserById = async (req, res) => {
 
     try{
-        const user = await Users.findByIdAndDelete(req.params.id)
+        const user = await Users.findByIdAndDelete(req.params.id);
         res
             .status(204)
             .json()

@@ -1,6 +1,5 @@
 import Tasks from '../models/Tasks';
 
-
 export const createTask = async (req, res) => {
     
     const {content} = req.body;
@@ -66,7 +65,7 @@ export const updateTaskById = async (req, res) => {
 export const deleteTaskById = async (req, res) => {
     
     try{
-        const task = await Tasks.findByIdAndDelete(req.params.id)
+        const task = await Tasks.findByIdAndDelete(req.params.id);
         res
             .status(204)
             .json()
