@@ -11,6 +11,6 @@ router.post('/api/v1/users', UserControl.createUser)
 
 router.put('/api/v1/users/:id', UserControl.updateUserById)
 
-router.delete('/api/v1/users', UserControl.deleteUserById)
+router.delete('/api/v1/users/:id', UserControl.deleteUserById)
 
 export default router;

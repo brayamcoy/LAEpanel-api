@@ -1,5 +1,6 @@
 import Users from '../models/Users';
 import jwt from 'jsonwebtoken';
+import Roles from '../models/Roles';
 
 export const register = async (req, res) => {
     const {username, email, password, name, lastname, phone, roles} = req.body;
@@ -7,22 +8,25 @@ export const register = async (req, res) => {
     const user = new Users({
         username,
         email,
-        password: Users.encryptPassword(password),
+        password: await Users.encryptPassword(password),
         name,
         lastname,
-        phone
+        phone,
+        active: true
     })
 
     if(roles){
-        const foundRoles = Roles.find({name: {$in: roles}});
+        const foundRoles = await Roles.find({name: {$in: roles}});
         user.roles = foundRoles.map(role => role._id);
     }else{
-        const roleDefault = Roles.find({name: "user"});
+        const roleDefault = await Roles.findOne({name: "user"});
         user.roles = [roleDefault._id];
     }
 
-    const savedUser = await Tasks.save();
-    const token = jwt.sign({id: savedUser._id}, process.env.JWT_SECRET, {
+    const savedUser = await user.save();
+    console.log(savedUser);
+
+    const token = await jwt.sign({id: savedUser._id}, process.env.JWT_SECRET, {
 
         expiresIn: 86400 //un día aprox
     });
@@ -33,5 +37,21 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-     res.json({message: "login"})
+    
+    const userFound = await Users.findOne({email: req.body.email}).populate('roles');
+
+    if(!userFound) return res.status(400).json({message: "Usuario o contraseña invalidos"});
+
+    const matchPassword = await Users.comparePassword(req.body.password, userFound.password);
+
+    if (!matchPassword) return res.status(400).json({message: "Usuario o contraseña invalidos"});
+
+    const token = jwt.sign({id: userFound._id}, process.env.JWT_SECRET, {
+        expiresIn: 86400 // un diá aprox
+    })
+
+    console.log(userFound);
+    res.json({token: token})
+    
+
 }

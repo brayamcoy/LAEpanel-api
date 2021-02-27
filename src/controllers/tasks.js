@@ -23,7 +23,7 @@ export const getTask = async (req, res) => {
         res
         .status(200)
         .json(task)
-    }catch{
+    }catch(error){
         res
         .status(400)
         .json({message: "Error al mostrar las tareas"})
@@ -39,7 +39,7 @@ export const getTaskById = async (req, res) => {
             .status(200)
             .json(task)
     }
-    catch{
+    catch(error){
         res
             .status(400)
             .json({message: "La tarea no ha sido encontrada"})
@@ -54,10 +54,10 @@ export const updateTaskById = async (req, res) => {
         res
             .status(200)
             .json(task)
-    }catch{
+    }catch(error){
         res
             .status(400)
-            .json({message: "Error al actualizar el usuario"})
+            .json({message: "Error al actualizar la tarea"})
     }
    
 
@@ -70,7 +70,7 @@ export const deleteTaskById = async (req, res) => {
         res
             .status(204)
             .json()
-    }catch{
+    }catch(error){
         res
             .status(400)
             .json({message: "Error al eliminar la tarea"})

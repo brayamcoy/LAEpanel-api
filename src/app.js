@@ -1,7 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import {createRoles} from './lib/initialSetup';
+
 
 //Importando Rutas
 import userRouter from './routes/users';
@@ -9,6 +11,7 @@ import taskRouter from './routes/tasks';
 import authRouter from './routes/auth';
 
 const app = express();
+dotenv.config();
 createRoles();
 
 app.use(cors());
