@@ -5,6 +5,7 @@ import cors from 'cors';
 //Importando Rutas
 import userRouter from './routes/users';
 import taskRouter from './routes/tasks';
+import authRouter from './routes/auth';
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.get('/', (req, res) =>{
     res.json("Bienvenido a la api")
 })
 
+app.use(authRouter);
 app.use(userRouter);
 app.use(taskRouter);
 
