@@ -10,15 +10,22 @@ export const register = async (req, res) => {
         password: Users.encryptPassword(password),
         name,
         lastname,
-        phone,
-        roles
+        phone
     })
+
+    if(roles){
+        const foundRoles = Roles.find({name: {$in: roles}});
+        user.roles = foundRoles.map(role => role._id);
+    }else{
+        const roleDefault = Roles.find({name: "user"});
+        user.roles = [roleDefault._id];
+    }
 
     const savedUser = await Tasks.save();
-    const token = jwt.sign(id: savedUser._id, process.env.JWT_SECRET, {
+    const token = jwt.sign({id: savedUser._id}, process.env.JWT_SECRET, {
 
         expiresIn: 86400 //un día aprox
-    })
+    });
 
     res
         .status(200)
